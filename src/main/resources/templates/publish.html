@@ -6,11 +6,12 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/community.css">
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
     <script src="js/jquery.min.js" ></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+
 </head>
 <body>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" th:insert="~{navigation :: nav}">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -28,14 +29,16 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${session.user !=null}">
-                    <a href="/publish">发布</a>
+                    <a href="/publish">提问</a>
                 </li>
                 <li th:if="${session.user == null}"><a href="https://github.com/login/oauth/authorize?client_id=547376874f2a633edebf&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a></li>
                 <li class="dropdown" th:if="${session.user != null}">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}">我 <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
+                        <span th:text="${session.user.getName()}"></span>
+                        <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">消息中心</a></li>
-                        <li><a href="#">个人资料</a></li>
+                        <li><a href="/profile/question">我的问题</a></li>
                         <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
