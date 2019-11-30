@@ -1,10 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>码匠社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery.min.js" ></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 
 </head>
 <body>
-<nav class="navbar navbar-default" th:fragment="nav">
+<nav class="navbar navbar-default" th:insert="~{navigation :: nav}">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -22,7 +29,7 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${session.user !=null}">
-                    <a href="/publish">提问</a>
+                    <a href="/publish">发布</a>
                 </li>
                 <li th:if="${session.user == null}"><a href="https://github.com/login/oauth/authorize?client_id=547376874f2a633edebf&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a></li>
                 <li class="dropdown" th:if="${session.user != null}">
@@ -31,8 +38,8 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="/profile/questions">我的问题</a></li>
-                        <li><a href="/logout">退出登录</a></li>
+                        <li><a href="/profile/question">我的问题</a></li>
+                        <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
             </ul>
@@ -40,6 +47,11 @@
     </div>
 </nav>
 
+<div class="jumbotron">
+    <h1>出错了！！！</h1>
+    <p th:text="${message}">服务太热了！要不稍后再来试试~</p>
+    <p><a class="btn btn-primary btn-lg" href="#" role="button">回到主页</a></p>
+</div>
 
 </body>
 </html>
