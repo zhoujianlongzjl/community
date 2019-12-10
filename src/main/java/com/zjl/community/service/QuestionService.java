@@ -14,9 +14,11 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -32,7 +34,9 @@ public class QuestionService {
     public PaginationDTO list(Integer page, Integer size) {
 
         Integer offset = size * (page - 1);
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -126,5 +130,24 @@ public class QuestionService {
         question.setId(id);
         question.setViewCount(1);
         questionExtMapper.incView(question);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+        if (StringUtils.isEmpty(questionDTO.getTags())){
+            return new ArrayList<>();
+        }
+        String regexpTag = StringUtils.replace(questionDTO.getTags(), ",", "|");
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        question.setTags(regexpTag);
+
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO1 = new QuestionDTO();
+            BeanUtils.copyProperties(q,questionDTO1);
+
+            return questionDTO1;
+        }).collect(Collectors.toList());
+        return questionDTOS;
     }
 }
