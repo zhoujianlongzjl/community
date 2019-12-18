@@ -6,10 +6,18 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/editormd.preview.min.css">
+
+
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/community.js" type="application/javascript"></script>
     <script src="/js/moment.js" type="application/javascript"></script>
+
+    <script src="/js/editormd.min.js"></script>
+    <script src="/js/lib/marked.min.js"></script>
+    <script src="/js/lib/prettify.min.js"></script>
+
 
 </head>
 <body>
@@ -67,7 +75,17 @@
                     阅读数：<span th:text="${question.viewCount}"></span>
                     </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}"></div>
+                <!--      内容    -->
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view" >
+                    <textarea style="display:none;" th:text="${question.description}"></textarea>
+                </div>
+
+                <script type="text/javascript">
+                    $(function() {
+                         editormd.markdownToHTML("question-view", {});
+                    });
+                </script>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <!--      标签          -->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -181,7 +199,7 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>站长微信</h4>
-                <img class="img-thumbnail question-wechat" src="/img/wechat.png">
+                <img class="img-thumbnail question-wechat" src="/images/wechat.png">
             </div>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

@@ -3,6 +3,7 @@ package com.zjl.community.interceptor;
 import com.zjl.community.mapper.UserMapper;
 import com.zjl.community.model.User;
 import com.zjl.community.model.UserExample;
+import com.zjl.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,6 +18,9 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
@@ -30,6 +34,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                     List<User> users = userMapper.selectByExample(userExample);
                     if (users.size() != 0){
                         request.getSession().setAttribute("user",users.get(0));
+                        Long unreadCount= notificationService.unreadCount(users.get(0).getId());
+
+                        request.getSession().setAttribute("unreadCount",unreadCount);
                     }
                     break;
                 }
