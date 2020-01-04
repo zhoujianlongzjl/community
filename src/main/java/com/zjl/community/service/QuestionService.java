@@ -2,6 +2,7 @@ package com.zjl.community.service;
 
 import com.zjl.community.dto.PaginationDTO;
 import com.zjl.community.dto.QuestionDTO;
+import com.zjl.community.dto.QuestionQueryDTO;
 import com.zjl.community.exception.CustomizeErrorCode;
 import com.zjl.community.exception.CustomizeException;
 import com.zjl.community.mapper.QuestionExtMapper;
@@ -31,12 +32,19 @@ public class QuestionService {
     private UserMapper userMapper;
 
 
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search,Integer page, Integer size) {
+        if (StringUtils.isEmpty(search)){
+            search = StringUtils.replace(search, " ", "|");
 
+        }
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
         Integer offset = size * (page - 1);
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
+        questionQueryDTO.setPage(offset);
+        questionQueryDTO.setSize(size);
+        questionQueryDTO.setSearch(search);
+        List<Question> questionList = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -48,7 +56,9 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
         paginationDTO.setData(questionDTOList);
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
+
+
+        Integer totalCount =  questionExtMapper.countBySearch(questionQueryDTO);
 
         paginationDTO.setPagination(totalCount, page, size);
 

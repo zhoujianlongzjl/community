@@ -162,12 +162,12 @@
                             <a href="#">
                                 <img class="media-object img-rounded"
                                      src="https://avatars1.githubusercontent.com/u/56070344?v=4"
-                                     th:src="${question.user.avatarUrl}">
+                                     th:src="${session.user !=null ? session.user.avatarUrl : '/images/default-avatar.png'}">
                             </a>
                         </div>
                         <div class="media-body">
                             <h5 class="media-heading">
-                                <span th:text="${question.user.name}"></span>
+                                <span th:text="${session.user !=null ? session.user.name : '匿名用户'}"></span>
                             </h5>
                         </div>
                     </div>
@@ -213,6 +213,6 @@
         </div>
     </div>
 </div>
-
+<div  th:insert="~{footer :: foot}"></div>
 </body>
 </html>
